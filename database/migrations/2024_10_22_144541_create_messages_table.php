@@ -21,11 +21,11 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::table('groups',function (Brueprint $table) {
+        Schema::table('groups',function (Blueprint $table) {
             $table->foreignId('last_message_id')->nullable()->constrained('messages');
         });
 
-        Schema::table('conversations',function (Brueprint $table) {
+        Schema::table('conversations',function (Blueprint $table) {
             $table->foreignId('last_message_id')->nullable()->constrained('messages');
         });
     }
