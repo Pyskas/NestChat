@@ -55,7 +55,7 @@ class User extends Authenticatable
     }
 
 
-    public static function getUserExceptUser(User $user)
+    public static function getUsersExceptUser(User $user)
     {
         $userId = $user->id;
         $query = User::select(['users.*', 'messages.message as last_message', 'messages.created_at as last_message_date'])
@@ -66,7 +66,7 @@ class User extends Authenticatable
             ->leftJoin('conversations', function ($join) use ($userId) {
                 $join->on('conversations.user_id1', '=', 'users.id')
                     ->where('conversations.user_id2', '=', $userId)
-                    ->orWhere(function ($query) {
+                    ->orWhere(function ($query) use ($userId) {
                         $query->on('conversations.user_id2', '=', 'users.id')
                             ->where('conversations.user_id1', '=', $userId);
                     });
