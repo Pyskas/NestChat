@@ -14,9 +14,6 @@ const ChatLayout = ({ children }) => {
 
     const isUserOnline = (userId) => onlineUsers[userId];
 
-    console.log("conversations", conversations)
-    console.log("selectedConversation", selectedConversation)
-
     const onSearch = (ev) => {
         const search = ev.target.value.toLowerCase();
         setLocalConversations(
@@ -98,7 +95,7 @@ const ChatLayout = ({ children }) => {
                 }`}
             >
                 <div className="flex items-center justify-between px-3 py-2 text-xl font-medium text-gray-200">
-                    Мои сообщения
+                    Мои чаты
                     <div className="tooltip tooltip-left"
                     data-tip="Создать новую группу"
                     >

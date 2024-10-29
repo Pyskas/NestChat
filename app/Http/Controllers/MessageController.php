@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\MessageResource;
+use App\Models\Message;
+use App\Models\User;
+use App\Models\Group;
 use Illuminate\Http\Request;
 
 class MessageController extends Controller
@@ -26,7 +30,7 @@ class MessageController extends Controller
     {
         $messages = Message::where('group_id', $group->id)
         ->latest()
-        ->paginate(50);
+        ->paginate(10);
 
         return inertia('Home', [
             'selectedConversation' => $group->toConversationArray(),
@@ -53,6 +57,9 @@ class MessageController extends Controller
             ->latest()
             ->paginate(10);
         }
+
+
+        return MessageResource::collection($messages);
     }
 
 
@@ -61,7 +68,7 @@ class MessageController extends Controller
         $data = $request->validated();
         $data['sender_id'] = auth()->id();
         $receiverId = $data['receiver_id'] ?? null;
-        $group_id = $data['group_id'] ?? null;
+        $groupId = $data['group_id'] ?? null;
 
         $files = $data['attachments'] ?? [];
 
@@ -91,7 +98,7 @@ class MessageController extends Controller
             Conversation::updateConversationWithMessage($receiverId, auth()->id(), $message);
         }
 
-        if ($group_id) {
+        if ($groupId) {
             Group::updateGroupWithMessage($groupId, $message);
         }
 
