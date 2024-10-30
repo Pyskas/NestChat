@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Conversation;
+use App\Http\Requests\StoreMessageRequest;
 use App\Http\Resources\MessageResource;
 use App\Models\Message;
 use App\Models\User;

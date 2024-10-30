@@ -7,6 +7,7 @@ import {
     PaperAirplaneIcon,
 } from "@heroicons/react/24/solid";
 import NewMessageInput from "./NewMessageInput";
+import axios from "axios";
 
 const MessageInput = ({ conversation = null }) => {
     const [newMessage, setNewMessage] = useState("");
@@ -15,12 +16,36 @@ const MessageInput = ({ conversation = null }) => {
 
     const onSendClick = () => {
         if (newMessage.trim() === "") {
-            setInputErrorMessage("Напишите сообщение");
-
-            setTimeout(() => {
-                setInputErrorMessage("");
-            }, 3000)
+            setInputErrorMessage("Пожалуйста, введите сообщение");
+            setTimeout(() => setInputErrorMessage(""), 3000);
             return;
+        }
+
+        const formData = new FormData();
+        formData.append("message", newMessage);
+        
+        if (conversation.is_user) {
+            formData.append("receiver_id", conversation.id);
+        } else if (conversation.is_group) {
+            formData.append("group_id", conversation.id);
+        }
+
+        setMessageSending(true);
+        
+        axios.post(route("message.store"), formData, {
+            onUploadProgress: (progressEvent) => {
+                const progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
+                console.log(progress);
+            }
+        })
+        .then((response) => {
+            setNewMessage("");
+            setMessageSending(false);
+        })
+        .catch((error) => {
+            console.error("Error sending message:", error);
+            setMessageSending(false);
+        });
     }
 
     return (
@@ -29,25 +54,27 @@ const MessageInput = ({ conversation = null }) => {
                 <button className="relative p-1 text-gray-400 hover:text-gray-300">
                     <PaperClipIcon className="w-6" />
                     <input 
-                    type="file"
-                    multiple
-                    className="absolute top-0 bottom-0 left-0 right-0 z-20 opacity-0 cursor-pointer"
-                     />
+                        type="file"
+                        multiple
+                        className="absolute top-0 bottom-0 left-0 right-0 z-20 opacity-0 cursor-pointer" 
+                    />
                 </button>
                 <button className="relative p-1 text-gray-400 hover:text-gray-300">
                     <PhotoIcon className="w-6" />
-                    <input type="file"
-                    multiple
-                    accept="image/*"
-                    className="absolute top-0 bottom-0 left-0 right-0 z-20 opacity-0 cursor-pointer"                    
+                    <input 
+                        type="file"
+                        multiple
+                        accept="image/*"
+                        className="absolute top-0 bottom-0 left-0 right-0 z-20 opacity-0 cursor-pointer" 
                     />
                 </button>
             </div>
             <div className="order-1 px-3 xs:p-0 min-w-[220px] basis-full xs:basis-0 xs:order-2 flex-1 relative">
                 <div className="flex">
                     <NewMessageInput
-                    value={newMessage}
-                    onChange={(ev) => setNewMessage(ev.target.value)}
+                        value={newMessage}
+                        onSend={onSendClick}
+                        onChange={(ev) => setNewMessage(ev.target.value)}
                     />
                     <button onClick={onSendClick} className="rounded-l-none btn btn-info">
                         {messageSending && (
