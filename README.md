@@ -14,8 +14,8 @@ RealTime Messenger — это современное приложение для
 
 - **Frontend:** React.js, Redux,
 - **Backend:** Node.js, PHP
-- **API** Inertia
-- **Style** Tailwind CSS, daisyUI, HeroIcons
+- **API:** Inertia
+- **Style:** Tailwind CSS, daisyUI, HeroIcons
 - **База данных:** SQLI
 - **WebSocket:** Для реализации функционала обмена сообщениями в реальном времени
 
