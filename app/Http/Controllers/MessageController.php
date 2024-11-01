@@ -6,9 +6,13 @@ use App\Models\Conversation;
 use App\Http\Requests\StoreMessageRequest;
 use App\Http\Resources\MessageResource;
 use App\Models\Message;
+use App\Models\MessageAttachment;
 use App\Models\User;
 use App\Models\Group;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+
 
 class MessageController extends Controller
 {
@@ -79,7 +83,7 @@ class MessageController extends Controller
         $attachments = [];
         if ($files) {
             foreach ($files as $file) {
-                $directory = 'attachment/' . Str::random(32);
+                $directory = 'attachments/' . Str::random(32);
                 Storage::makeDirectory($directory);
 
                 $model = [
