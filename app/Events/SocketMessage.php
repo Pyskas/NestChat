@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Http\Controllers\MessageController;
 use App\Http\Resources\MessageResource;
 use App\Models\Message;
 use Illuminate\Broadcasting\Channel;

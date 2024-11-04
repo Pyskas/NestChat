@@ -15,6 +15,9 @@ const MessageInput = ({ conversation = null }) => {
     const [messageSending, setMessageSending] = useState(false);
 
     const onSendClick = () => {
+        if (messageSending) {
+            return;
+        }
         if (newMessage.trim() === "") {
             setInputErrorMessage("Пожалуйста, введите сообщение");
             setTimeout(() => setInputErrorMessage(""), 3000);
@@ -76,10 +79,7 @@ const MessageInput = ({ conversation = null }) => {
                         onSend={onSendClick}
                         onChange={(ev) => setNewMessage(ev.target.value)}
                     />
-                    <button onClick={onSendClick} className="rounded-l-none btn btn-info">
-                        {messageSending && (
-                            <span className="loading loading-spinner loading-xs"></span>
-                        )}
+                    <button onClick={onSendClick} disabled={messageSending} className="rounded-l-none btn btn-info">
                         <PaperAirplaneIcon className="w-6" />
                         <span className="hidden sm:inline">Отправить</span>
                     </button>
