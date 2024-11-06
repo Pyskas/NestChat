@@ -62,6 +62,7 @@ const ConversationItem = ({
                     </h3>
                     {conversation.last_message_date && (
                         <span className="text-nowrap">
+                            {/* {conversation.last_message_date} */}
                             {formatMessageDateShort(
                                 conversation.last_message_date
                             )}
