@@ -1,4 +1,4 @@
-import { useState, Fragment } from "react";
+import { useState } from "react";
 import {
     PaperClipIcon,
     PhotoIcon,
@@ -10,9 +10,10 @@ import {
 import NewMessageInput from "./NewMessageInput";
 import axios from "axios";
 import EmojiPicker from "emoji-picker-react";
-import { Popover, PopoverButton, PopoverPanel, Transition } from "@headlessui/react";
+import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import { isAudio, isImage } from "@/helpers";
 import AttachmentPreview from "./AttachmentPreview";
+import AudioRecorder from "./AudioRecorder";
 import CustomAudioPlayer from "./CustomAudioPlayer";
 
 const MessageInput = ({ conversation = null }) => {
@@ -31,7 +32,7 @@ const MessageInput = ({ conversation = null }) => {
                 url: URL.createObjectURL(file),
             };
         });
-        ev.target.value = null;
+        // ev.target.value = null;
 
         setChosenFiles((prevFiles) => {
            return [...prevFiles, ...updatedFiles]; 
@@ -103,6 +104,10 @@ const MessageInput = ({ conversation = null }) => {
             .post(route("message.store"), data)
     }
 
+    const recordedAudioReady = (file, url) => {
+        setChosenFiles((prevFiles) => [...prevFiles, { file, url}]);
+    };
+    
     return (
         <div className="flex flex-wrap items-start py-3 border-t border-slate-700">
             <div className="flex-1 order-2 p-2 xs:flex-none xs:order-1">
@@ -125,6 +130,7 @@ const MessageInput = ({ conversation = null }) => {
                         className="absolute top-0 bottom-0 left-0 right-0 z-20 opacity-0 cursor-pointer" 
                     />
                 </button>
+                <AudioRecorder fileReady={recordedAudioReady} />
             </div>
             <div className="order-1 px-3 xs:p-0 min-w-[220px] basis-full xs:basis-0 xs:order-2 flex-1 relative">
                 <div className="flex">

@@ -55,8 +55,7 @@ const MessageAttachments = ({ attachments, attachmentClick }) => {
                                 <div className="relative flex items-center justify-center">
                                     <audio
                                         src={attachment.url}
-                                        controls
-                                        className="w-full" 
+                                        controls 
                                     ></audio>
                                 </div>
                             )}

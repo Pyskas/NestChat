@@ -53,8 +53,11 @@ const CustomAudioPlayer = ({ file, showVolume = true }) => {
                 className="hidden"
                 />
                 <button onClick={togglePlayPause}>
-                    {isPlaying && <PauseCircleIcon className="w-6 text-gray-400" />}
-                    {!isPlaying && <PauseCircleIcon className="w-6 text-gray-400" />}
+                {isPlaying ? (
+                   <PauseCircleIcon className="w-6 text-gray-400" />
+                    ) : (
+                   <PlayCircleIcon className="w-6 text-gray-400" />
+                        )}
                 </button>
                 {showVolume && (
                     <input
