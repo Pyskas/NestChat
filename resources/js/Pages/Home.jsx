@@ -18,20 +18,30 @@ function Home({ selectedConversation = null, messages = null }) {
     const [showAttachmentPreview, setShowAttachmentPreview] = useState(false);
     const [previewAttachment, setPreviewAttachment] = useState({});
     const { on } = useEventBus();
-
+    
     const messageCreated = (message) => {
-        if (selectedConversation &&
+        if (
+            selectedConversation &&
             selectedConversation.is_group &&
-            selectedConversation.id == message.group_id) {
+            selectedConversation.id == message.group_id
+        ) {
             setLocalMessages((prevMessages) => [...prevMessages, message]);
         }
 
-        if (selectedConversation &&
+        if (
+            selectedConversation &&
             selectedConversation.is_user &&
-            (selectedConversation.id == message.sender_id || selectedConversation.id == message.receiver_id)) {
+            (selectedConversation.id == message.sender_id ||
+                 selectedConversation.id == message.receiver_id)
+        ) {
             setLocalMessages((prevMessages) => [...prevMessages, message]);
         }
     };
+
+
+    
+    
+
 
     const loadMoreMessages = useCallback(() => {
         if (noMoreMessages) {
@@ -73,17 +83,20 @@ function Home({ selectedConversation = null, messages = null }) {
     useEffect(() => {
         setTimeout(() => {
             if (messagesCtrRef.current) {
-                messagesCtrRef.current.scrollTop = messagesCtrRef.current.scrollHeight;
+                messagesCtrRef.current.scrollTop = 
+                messagesCtrRef.current.scrollHeight;
             }
         }, 10);
 
-        const offCreated = on('message.created', messageCreated);
+        const offCreated = on("message.created", messageCreated);
+        // const offDeleted = on("message.deleted", messageDeleted);
 
         setScrollFromBottom(0);
         setNoMoreMessages(false);
 
         return () => {
             offCreated();
+            // offDeleted();
         }
     }, [selectedConversation]);
 
@@ -161,6 +174,7 @@ function Home({ selectedConversation = null, messages = null }) {
                                         key={message.id}
                                         message={message}
                                         attachmentClick={onAttachmentClick}
+                                        setLocalMessages={setLocalMessages}
                                     />
                                 ))}
                             </div>
