@@ -1,9 +1,12 @@
-import { Menu, Transition } from "@headlessui/react";
+import { Menu, MenuButton, MenuItem, MenuItems, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { EllipsisVerticalIcon, LockClosedIcon, LockOpenIcon, ShieldCheckIcon, UserIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
+import { useEventBus } from "@/EventBus";
 
 export default function UserOptionsDropdown({ conversation }) {
+    const { emit } = useEventBus();
+    
     const changeUserRole = () => {
       console.log("Сменить роль пользователя");
         if (!conversation.is_user) {
@@ -13,6 +16,7 @@ export default function UserOptionsDropdown({ conversation }) {
         axios
          .post(route("user.changeRole", conversation.id))
         .then((res) => {
+            emit("toast.show", res.data.message);
             console.log(res.data);
         })
         .catch((err) => {
@@ -29,6 +33,7 @@ export default function UserOptionsDropdown({ conversation }) {
     axios
         .post(route("user.blockUnblock", conversation.id))
         .then((res) => {
+            emit("toast.show", res.data.message);
             console.log(res.data);
         })
         .catch((err) => {
@@ -40,9 +45,9 @@ export default function UserOptionsDropdown({ conversation }) {
         <div>
             <Menu as="div" className="relative inline-block text-left">
                 <div>
-                    <Menu.Button className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-black/40">
+                    <MenuButton className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-black/40">
                      <EllipsisVerticalIcon className="w-5 h-5" />   
-                    </Menu.Button>
+                    </MenuButton>
                 </div>
                 <Transition
                     as={Fragment}
@@ -53,9 +58,9 @@ export default function UserOptionsDropdown({ conversation }) {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                 >
-                    <Menu.Items className="absolute right-0 z-50 w-48 mt-2 bg-gray-800 rounded-md shadow-lg">
+                    <MenuItems className="absolute right-0 z-50 w-48 mt-2 bg-gray-800 rounded-md shadow-lg">
                         <div className="px-1 py-1">
-                            <Menu.Item>
+                            <MenuItem>
                                 {({ active }) => (
                                     <button
                                     onClick={onBlockUser}
@@ -80,10 +85,10 @@ export default function UserOptionsDropdown({ conversation }) {
                                             )}
                                         </button>
                                 )}
-                            </Menu.Item>
+                            </MenuItem>
                         </div>
                         <div className="px-1 py-1">
-                            <Menu.Item>
+                            <MenuItem>
                                 {({ active }) => (
                                     <button
                                     onClick={changeUserRole}
@@ -108,9 +113,9 @@ export default function UserOptionsDropdown({ conversation }) {
                                             )}
                                         </button>
                                 )}
-                            </Menu.Item>
+                            </MenuItem>
                         </div>
-                    </Menu.Items>
+                    </MenuItems>
                 </Transition>
             </Menu>
         </div>

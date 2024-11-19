@@ -32,14 +32,14 @@ export default function GroupModal({ show = false, onClose = () => {} }) {
             put(route("group.update", group.id), {
                 onSuccess: () => {
                     closeModal();
-                    emit("toast.show", `Group "${data.name}" was updated`);
+                    emit("toast.show", `Группа "${data.name}" обновлена`);
                 },
             });
             return;
         }
         post(route("group.store"), {
             onSuccess: () => {
-                emit("toast.show", `Group "${data.name}" was created`);
+                emit("toast.show", `Группа "${data.name}" создана`);
                 closeModal();
             },
         });

@@ -21,7 +21,7 @@ export default function Toast({ }) {
     }, [on]);
 
     return (
-        <div className="toast min-w-[280px]">
+        <div className="toast min-w-[280px] w-full xs:w-auto">
             {toasts.map((toast, index) => (
         <div key={toast.uuid} className="px-4 py-3 text-gray-100 rounded-md alert alert-success">
         <span>{toast.message}</span>
